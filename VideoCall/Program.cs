@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using VideoCall.Infrastructure.Persistance;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -19,3 +22,20 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
+
+
+/*TODO: 
+    Add a new controller to handle the Session and Participant entities
+    Add a new service to handle the Session and Participant entities
+    Add a new repository to handle the Session and Participant entities
+    Add a new DTO to handle the Session and Participant entities
+    Add a new mapping profile to handle the Session and Participant entities
+    Add a new endpoint to handle the Session and Participant entities
+    Add Authentication to the application with EntityFrameworkCore
+    Add websockets support with SignalR
+    Add a new service to handle the SignalR hub
+    Add a new endpoint to handle the SignalR hub
+    Add a new DTO to handle the SignalR hub
+    Add MediatR to the application
+    Add Logging to the application
+*/
