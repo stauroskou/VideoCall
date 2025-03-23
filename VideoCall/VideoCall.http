@@ -1,0 +1,6 @@
+@VideoCall_HostAddress = http://localhost:5223
+
+GET {{VideoCall_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
