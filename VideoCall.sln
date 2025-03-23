@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35707.178 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoCall", "VideoCall\VideoCall.csproj", "{C46C5D88-37AE-43FF-A5EA-AF61E720CAF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoCall.Api", "VideoCall\VideoCall.Api.csproj", "{C46C5D88-37AE-43FF-A5EA-AF61E720CAF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoCall.Application", "VideoCall.Application\VideoCall.Application.csproj", "{28CF913E-9794-41D6-9009-55E9E821C120}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoCall.Core", "VideoCall.Core\VideoCall.Core.csproj", "{5C818134-69A6-4711-A259-4CD58292A99C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoCall.Infrastructure", "VideoCall.Infrastructure\VideoCall.Infrastructure.csproj", "{B2FC4C77-6EFE-47E8-8E25-706D07184B3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{C46C5D88-37AE-43FF-A5EA-AF61E720CAF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C46C5D88-37AE-43FF-A5EA-AF61E720CAF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C46C5D88-37AE-43FF-A5EA-AF61E720CAF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28CF913E-9794-41D6-9009-55E9E821C120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28CF913E-9794-41D6-9009-55E9E821C120}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28CF913E-9794-41D6-9009-55E9E821C120}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28CF913E-9794-41D6-9009-55E9E821C120}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C818134-69A6-4711-A259-4CD58292A99C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C818134-69A6-4711-A259-4CD58292A99C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C818134-69A6-4711-A259-4CD58292A99C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C818134-69A6-4711-A259-4CD58292A99C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2FC4C77-6EFE-47E8-8E25-706D07184B3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2FC4C77-6EFE-47E8-8E25-706D07184B3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2FC4C77-6EFE-47E8-8E25-706D07184B3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2FC4C77-6EFE-47E8-8E25-706D07184B3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
