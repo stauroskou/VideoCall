@@ -10,4 +10,15 @@
     <ProjectReference Include="..\VideoCall.Core\VideoCall.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Participant\Queries\" />
+    <Folder Include="Session\Commands\" />
+    <Folder Include="Session\Queries\" />
+    <Folder Include="User\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
+  </ItemGroup>
+
 </Project>
