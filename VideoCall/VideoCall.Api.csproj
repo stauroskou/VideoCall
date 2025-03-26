@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\VideoCall.Core\VideoCall.Core.csproj" />
     <ProjectReference Include="..\VideoCall.Infrastructure\VideoCall.Infrastructure.csproj" />
+    <ProjectReference Include="..\VideoCall.Persistance\VideoCall.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

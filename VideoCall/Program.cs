@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-using VideoCall.Infrastructure.Persistance;
+using VideoCall.Core.Entities;
+using VideoCall.Infrastructure.Configuration;
+using VideoCall.Pesistance.Persistance;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +16,30 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(builder.Configuration.GetConnectionString("DefaultConnection")!));
+builder.Services.AddDefaultConfiguration();
+builder.Services.AddMediatRConfiguration();
+
+builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
+    .AddIdentityCookies();
+
+builder.Services.AddAuthorizationBuilder();
+
+builder.Services.AddDbContext<AppDbIdentityContext>(
+    options => options.UseInMemoryDatabase(builder.Configuration.GetConnectionString("DefaultConnection")!));
+
+builder.Services.AddDbContext<AppDbContext>(
+    options => options.UseInMemoryDatabase(builder.Configuration.GetConnectionString("DefaultConnection")!));
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.User.RequireUniqueEmail = false;
+});
+
+
+
+builder.Services.AddIdentityCore<User>()
+    .AddEntityFrameworkStores<AppDbIdentityContext>()
+    .AddApiEndpoints();
 
 var app = builder.Build();
 
@@ -25,6 +51,10 @@ if (app.Environment.IsDevelopment())
 }
 
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+
 app.UseHttpsRedirection();
 
 app.MapControllers();
@@ -33,17 +63,11 @@ app.Run();
 
 
 /*TODO: 
-    Add a new controller to handle the Session and Participant entities
-    Add a new service to handle the Session and Participant entities
-    Add a new repository to handle the Session and Participant entities
+    Ftiakse to User
     Add a new DTO to handle the Session and Participant entities
-    Add a new mapping profile to handle the Session and Participant entities
-    Add a new endpoint to handle the Session and Participant entities
-    Add Authentication to the application with EntityFrameworkCore
     Add websockets support with SignalR
     Add a new service to handle the SignalR hub
     Add a new endpoint to handle the SignalR hub
     Add a new DTO to handle the SignalR hub
-    Add MediatR to the application
     Add Logging to the application
 */

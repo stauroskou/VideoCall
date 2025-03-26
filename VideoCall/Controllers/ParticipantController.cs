@@ -1,70 +1,48 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using VideoCall.Core.Entities;
-using VideoCall.Infrastructure.Persistance;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using VideoCall.Application.Abstractions.ApiResponse;
+using VideoCall.Application.Participant.Commands.AddParticipant;
+using VideoCall.Application.Participant.Commands.RemoveParticipant;
+using VideoCall.Application.Participant.Queries.GetAllParticipants;
 
-namespace VideoCall.Api.Controllers
+namespace VideoCall.Api.Controllers;
+
+
+[Route("api/[controller]")]
+[ApiController]
+public class ParticipantController(ISender sender) : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ParticipantController(AppDbContext _appDbContext) : ControllerBase
+
+    [HttpPost("addToSession/{sessionId}")]
+    public async Task<IActionResult> AddParticipantToSession(string sessionId, [FromBody] string userId)
     {
-        [HttpPost]
-        public IActionResult CreateParticipant(Participant participant)
+        var command = new AddParticipantCommand(sessionId, userId);
+        var result = await sender.Send(command);
+
+        if(result.IsFailure)
         {
-            _appDbContext.Participants.Add(participant);
-            _appDbContext.SaveChanges();
-            return Ok();
+            return BadRequest(new GenericResponse<Core.Entities.Participant>(result.Error));
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetParticipant(int sessionId)
-        {
-            var session = _appDbContext.Sessions.AsNoTracking()
-                                                .FirstOrDefault(s => s.Id == sessionId);
 
-            if(session != null)
-            {
-                var participants = session.Participants.ToList();
-                return Ok(participants);
-            }
-            return BadRequest();
-        }
+        return Ok(new GenericResponse<Core.Entities.Participant>(result.Value));
+    }
 
-        [HttpGet("AddToSession/{id}")]
-        public async Task<IActionResult> AddParticipantToSession(int id, int sessionId)
-        {
-            var session = await _appDbContext.Sessions.FirstOrDefaultAsync(s => s.Id == sessionId);
-            if (session == null)
-                return NotFound("Session not found");
+    [HttpPost("removeFromSession/{id}/{sessionId}")]
+    public async Task<IActionResult> RemoveParticipantFromSession(string id, string sessionId)
+    {
+        var command = new RemoveParticipantCommand(id, sessionId);
+        var result = await sender.Send(command);
 
-            var participant = await _appDbContext.Participants.FirstOrDefaultAsync(s => s.Id == id);
-            if (participant == null)
-                return NotFound("Participant not found");
+        return Ok();
+    }
 
-            participant.SessionId = sessionId;
-            session.Participants.Add(participant);
-            await _appDbContext.SaveChangesAsync();
+    [HttpGet("getAllParticipantsFromSession/{sessionId}")]
+    public async Task<IActionResult> GetAllParticipantsFromSession(string sessionId)
+    {
+        var query = new GetAllParticipantsQuery(sessionId);
+        var result = await sender.Send(query);
 
-            return Ok();
-        }
-
-        [HttpGet("RemoveFromSession/{id}")]
-        public async Task<IActionResult> RemoveParticipantFromSession(int id, int sessionId)
-        {
-            var session = await _appDbContext.Sessions.FirstOrDefaultAsync(s => s.Id == sessionId);
-            if (session == null)
-                return NotFound("Session not found");
-
-            var participant = session.Participants.FirstOrDefault(s => s.Id == id);
-            if (participant == null)
-                return NotFound("Participant is not in the session");
-
-            participant.SessionId = null;
-            session.Participants.Remove(participant);
-            await _appDbContext.SaveChangesAsync();
-
-            return Ok();
-        }
+        return Ok();
     }
 }

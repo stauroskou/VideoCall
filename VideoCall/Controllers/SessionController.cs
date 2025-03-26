@@ -1,63 +1,76 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using VideoCall.Application.Abstractions.ApiResponse;
+using VideoCall.Application.Session.Commands.CreateSession;
+using VideoCall.Application.Session.Commands.DeleteSession;
+using VideoCall.Application.Session.Commands.UpdateSession;
+using VideoCall.Application.Session.Queries.GetSessions;
+using VideoCall.Application.Session.Queries.GetSessionsById;
 using VideoCall.Core.Entities;
-using VideoCall.Infrastructure.Persistance;
+using VideoCall.Core.Session.Requests;
+using VideoCall.Pesistance.Persistance;
 
-namespace VideoCall.Api.Controllers
+namespace VideoCall.Api.Controllers;
+
+[Authorize]
+[Route("api/[controller]")]
+[ApiController]
+public class SessionController(AppDbContext _appContext, ISender sender) : Controller
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class SessionController(AppDbContext _appContext) : ControllerBase
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateSession([FromBody]CreateSessionRequest request)
     {
-        [HttpPost]
-        public IActionResult CreateSession(Session session)
+        var command = new CreateSessionCommand(request.name, request.startTime, request.endTime);
+        var result = await sender.Send(command);
+        if (result.IsFailure)
         {
-            _appContext.Sessions.Add(session);
-            _appContext.SaveChanges();
-            return Ok();
+            return BadRequest(new GenericResponse<Session>(result.Error));
+        }
+        return Ok(new GenericResponse<Session>(result.Value));
+    }
+
+    [HttpGet("get")]
+    public async Task<IActionResult> GetSessions()
+    {
+        var query = new GetSessionsQuery();
+        var sessions = await sender.Send(query);
+        return Ok(new GenericResponse<List<Session>?>(sessions.Value));
+    }
+
+    [HttpGet("get/{id}")]
+    public async Task<IActionResult> GetSession(string id)
+    {
+        var query = new GetSessionByIdQuery(id);
+        var session = await sender.Send(query);
+
+        if (session.IsFailure)
+        {
+            return BadRequest(new GenericResponse<Session>(session.Error));
         }
 
-        [HttpGet]
-        public IActionResult GetSessions()
+        return Ok(new GenericResponse<Session>(session.Value));
+    }
+
+    [HttpPut("update/{id}")]
+    public async Task<IActionResult> UpdateSession(string id, [FromBody] UpdateSessionRequest request)
+    {
+        var command = new UpdateSessionCommand(id, request.name, request.startTime, request.endTime);
+        var result = await sender.Send(command);
+        return Ok();
+    }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> DeleteSession(string id)
+    {
+        var command = new DeleteSessionCommand(id);
+        var result = await sender.Send(command);
+
+        if (result.IsFailure)
         {
-            var sessions = _appContext.Sessions.Include(s => s.Participants).ToList();
-            return Ok(sessions);
+            return BadRequest(new GenericResponse<Session>(result.Error));
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetSession(int id)
-        {
-            var session = _appContext.Sessions.FirstOrDefault(s => s.Id == id);
-            return Ok(session);
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult UpdateSession(int id, Session session)
-        {
-            var existingSession = _appContext.Sessions.FirstOrDefault(s => s.Id == id);
-            if (existingSession == null)
-            {
-                return NotFound();
-            }
-            existingSession.Name = session.Name;
-            existingSession.StartTime = session.StartTime;
-            existingSession.EndTime = session.EndTime;
-            _appContext.SaveChanges();
-            return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult DeleteSession(int id)
-        {
-            var session = _appContext.Sessions.FirstOrDefault(s => s.Id == id);
-            if (session == null)
-            {
-                return NotFound();
-            }
-            _appContext.Sessions.Remove(session);
-            _appContext.SaveChanges();
-            return Ok();
-        }
+        return Ok(new GenericResponse<bool>(result.Value));
     }
 }
