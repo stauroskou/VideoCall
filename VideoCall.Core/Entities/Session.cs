@@ -5,10 +5,9 @@ namespace VideoCall.Core.Entities;
 public class Session
 {
     [Key]
-    public int Id { get; set; }
+    public required string Id { get; set; }
 
-    [Required]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [Required]
     public DateTime StartTime { get; set; }
