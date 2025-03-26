@@ -8,12 +8,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VideoCall.Core\VideoCall.Core.csproj" />
+    <ProjectReference Include="..\VideoCall.Persistance\VideoCall.Persistance.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Participant\Queries\" />
-    <Folder Include="Session\Commands\" />
-    <Folder Include="Session\Queries\" />
     <Folder Include="User\" />
   </ItemGroup>
 
