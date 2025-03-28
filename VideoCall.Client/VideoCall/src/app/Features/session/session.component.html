@@ -1,0 +1,27 @@
+<div class="session-container">
+  <div class="video-grid">
+    <div *ngFor="let participant of participants" class="video-container">
+      <div class="video-placeholder">
+        <span *ngIf="!participant.isVideoOn" class="no-video">
+          {{ participant.name[0] }}
+        </span>
+      </div>
+      <div class="participant-controls">
+        <span class="participant-name">{{ participant.name }}</span>
+        <span *ngIf="participant.isHost" class="host-badge">Host</span>
+        <span *ngIf="participant.isMuted" class="muted-icon">🔇</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="control-bar">
+    <button (click)="toggleMute()" [class.active]="isMuted">
+      {{ isMuted ? '🔇' : '🎤' }}
+    </button>
+    <button (click)="toggleVideo()" [class.active]="!isVideoOn">
+      {{ isVideoOn ? '📹' : '🚫' }}
+    </button>
+    <button class="leave-btn" (click)="leaveSession()">Leave</button>
+    <button *ngIf="isHost" class="end-btn" (click)="endSession()">End Session</button>
+  </div>
+</div>

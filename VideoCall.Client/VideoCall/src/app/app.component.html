@@ -1,0 +1,31 @@
+<router-outlet /> 
+
+<!-- <div class="auth-wrapper">
+  <div class="auth-container">
+    <h2>{{ isLoginMode ? 'Login' : 'Register' }}</h2>
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+      <label>Username</label>
+      <input type="text" formControlName="Username" />
+      <div *ngIf="authForm.get('Username')?.invalid && authForm.get('Username')?.touched">
+        <small>Username is required and must be valid.</small>
+      </div>
+
+      <label>Password</label>
+      <input type="password" formControlName="password" />
+      <div *ngIf="authForm.get('password')?.invalid && authForm.get('password')?.touched">
+        <small>Password must be at least 6 characters long.</small>
+      </div>
+
+      <div *ngIf="!isLoginMode">
+        <label>Confirm Password</label>
+        <input type="password" formControlName="confirmPassword" />
+        <div *ngIf="authForm.get('confirmPassword')?.invalid && authForm.get('confirmPassword')?.touched">
+          <small>Confirm password is required.</small>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="authForm.invalid">{{ isLoginMode ? 'Login' : 'Register' }}</button>
+    </form>
+    <button (click)="toggleMode()">Switch to {{ isLoginMode ? 'Register' : 'Login' }}</button>
+  </div>
+</div> -->

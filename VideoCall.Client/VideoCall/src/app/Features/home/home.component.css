@@ -1,0 +1,121 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.create-btn {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.sessions-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.session-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.session-info h3 {
+  margin: 0 0 10px 0;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.status-badge.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.status-badge.waiting {
+  background-color: #FFC107;
+  color: black;
+}
+
+.status-badge.ended {
+  background-color: #F44336;
+  color: white;
+}
+
+.join-btn {
+  width: 100%;
+  padding: 8px;
+  margin-top: 15px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.join-btn:hover {
+  background-color: #1976D2;
+}
+
+.no-sessions {
+  text-align: center;
+  grid-column: 1 / -1;
+  padding: 40px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+
+.session-info {
+    cursor: pointer;
+  }
+  
+.session-info:hover {
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.session-details {
+  margin-top: 15px;
+  padding-top: 15px;
+}
+
+.session-details h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.session-details hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 10px 0;
+}
+
+.participants-list ul {
+  list-style-type: none;
+  padding-left: 15px;
+  margin: 5px 0;
+}
+
+.participants-list li {
+  margin-bottom: 5px;
+  color: #666;
+}
