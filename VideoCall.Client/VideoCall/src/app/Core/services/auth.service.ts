@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { map, Observable, of, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -10,19 +9,17 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private cookieService = inject(CookieService);
   private router = inject(Router);
 
-  private apiUrl = 'https://localhost:44372/api/Account';
+  private apiUrl = 'https://localhost:7012/api/Account';
+  private tokenKey = 'authToken'; // Key to store the JWT token in localStorage
 
-
-   // Login method
-   login(username: string, password: string): Observable<boolean> {
-    return this.http.post<any>(`${this.apiUrl}/login`, { username, password }, { withCredentials: true }).pipe(
+  // Login method
+  login(username: string, password: string): Observable<boolean> {
+    return this.http.post<any>(`${this.apiUrl}/login`, { username, password }).pipe(
       tap((response) => {
-        console.log(response);
-        if (response.success) {
-          //this.cookieService.set('authToken', response.token, 1, '/'); // Store token in cookie (expires in 1 day)
+        if (response.success && response.data.token) {
+          localStorage.setItem(this.tokenKey, response.data.token); // Store JWT token in localStorage
         }
       }),
       map((response) => !!response.success) // Return true if login was successful
@@ -30,25 +27,28 @@ export class AuthService {
   }
 
   logout(): void {
-    this.cookieService.delete('.AspNetCore.Identity.Application', '/'); // Delete the cookie
+    localStorage.removeItem(this.tokenKey); // Remove the JWT token from localStorage
     this.router.navigate(['/login']); // Redirect to login page
   }
 
   isAuthenticated(): boolean {
-    var token = this.cookieService.getAll();
-    
-    return this.checkCookie(".AspNetCore.Identity.Application"); // Check if the auth token exists
+    const token = this.getAuthToken();
+    return !!token && !this.isTokenExpired(token); // Check if the token exists and is not expired
   }
 
-  getAuthToken(): string {
-    return this.cookieService.get('.AspNetCore.Identity.Application');
+  getAuthToken(): string | null {
+    return localStorage.getItem(this.tokenKey); // Retrieve the JWT token from localStorage
   }
 
-
-  checkCookie(name: string) {
-    const cookie = document.cookie.split('; ').find(cookie => cookie.startsWith(name));
-    console.log(document.cookie.split('; '));
-    return cookie ? true : false;
+  private isTokenExpired(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1])); // Decode the JWT payload
+      const expiry = payload.exp * 1000; // Convert expiry time to milliseconds
+      return Date.now() > expiry; // Check if the token is expired
+    } catch (e) {
+      return true; // If decoding fails, consider the token expired
+    }
   }
-  constructor() { }
+
+  constructor() {}
 }

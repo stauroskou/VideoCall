@@ -83,11 +83,10 @@ header {
   border-radius: 8px;
 }
 
-
 .session-info {
-    cursor: pointer;
-  }
-  
+  cursor: pointer;
+}
+
 .session-info:hover {
   background-color: #f5f5f5;
   border-radius: 4px;
@@ -118,4 +117,141 @@ header {
 .participants-list li {
   margin-bottom: 5px;
   color: #666;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #3f51b5; /* Primary color */
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.navbar .left-section {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .logo {
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-right: 20px; /* Add spacing between the logo and the Home button */
+}
+
+.navbar .spacer {
+  flex: 1;
+}
+
+.navbar button {
+  color: white;
+  font-size: 14px;
+  text-transform: uppercase;
+  margin-left: 15px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.navbar button:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Add a hover effect */
+  border-radius: 4px;
+  padding: 5px 10px;
+}
+
+.navbar button.active {
+  font-weight: bold;
+  border-bottom: 2px solid white; /* Highlight the active button */
+}
+
+.navbar .logo:hover {
+  color: #ffeb3b; /* Add hover effect for the logo */
+  cursor: pointer;
+}
+
+.session-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.edit-btn {
+  padding: 8px 12px;
+  background-color: #FFC107;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background-color: #FFA000;
+}
+
+.delete-btn {
+  padding: 8px 12px;
+  background-color: #F44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: #D32F2F;
+}
+
+.session-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.session-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+/* Triple-dot button styles */
+.mat-icon-button {
+  color: #666; /* Default color */
+  transition: color 0.3s ease, background-color 0.3s ease; /* Smooth transition for hover effects */
+  border-radius: 50%; /* Make the button circular */
+  padding: 8px; /* Add padding for better click area */
+}
+
+.mat-icon-button:hover {
+  color: #3f51b5; /* Change color on hover */
+  background-color: rgba(63, 81, 181, 0.1); /* Add a subtle background on hover */
+}
+
+.mat-icon-button:focus {
+  outline: none; /* Remove focus outline */
+  box-shadow: 0 0 4px rgba(63, 81, 181, 0.5); /* Add a subtle focus shadow */
+}
+
+/* Menu item styles */
+.mat-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Add spacing between the icon and text */
+  font-size: 14px; /* Adjust font size */
+  padding: 10px 15px; /* Add padding for better spacing */
+}
+
+.mat-menu-item:hover {
+  background-color: rgba(63, 81, 181, 0.1); /* Add hover effect for menu items */
+  border-radius: 4px; /* Add rounded corners */
+}
+
+.mat-menu-item mat-icon {
+  color: #3f51b5; /* Icon color */
+}
+
+.mat-menu-item:hover mat-icon {
+  color: #303f9f; /* Darker color on hover */
 }

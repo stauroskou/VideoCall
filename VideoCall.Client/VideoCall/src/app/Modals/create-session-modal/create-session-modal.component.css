@@ -1,0 +1,26 @@
+.full-width {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.actions button {
+  margin-left: 10px;
+}
+
+:host {
+  display: block;
+  padding: 30px; /* Add padding around the modal content */
+  max-width: 600px; /* Set a maximum width for the modal */
+  margin: 0 auto; /* Center the modal content */
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
+}

@@ -1,0 +1,81 @@
+.session-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.session-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.session-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.session-info {
+  cursor: pointer;
+}
+
+.session-info:hover {
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.session-details {
+  margin-top: 15px;
+  padding-top: 15px;
+}
+
+.session-details h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.session-details hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 10px 0;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.status-badge.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.status-badge.waiting {
+  background-color: #FFC107;
+  color: black;
+}
+
+.status-badge.ended {
+  background-color: #F44336;
+  color: white;
+}
+
+.join-btn {
+  width: 100%;
+  padding: 8px;
+  margin-top: 15px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.join-btn:hover {
+  background-color: #1976D2;
+}

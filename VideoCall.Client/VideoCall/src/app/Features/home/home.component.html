@@ -1,32 +1,32 @@
-<div class="container">
-    <header>
-      <h1>Video Call Sessions</h1>
-      <button class="create-btn" (click)="createNewSession()">Create New Session</button>
-    </header>
-  
-    <div class="sessions-list">
-      <div *ngFor="let session of sessions" class="session-card">
-        <div class="session-info" (click)="showSessionDetails(session)">
-          <h3>{{ session.name }}</h3>
-          <p>Participants: {{ session.participants }}</p>
-          <p>Status: <span class="status-badge {{ session.status }}">{{ session.status }}</span></p>
-          <p>Created: {{ session.createdAt | date:'short' }}</p>
-        </div>
-  
-        <div *ngIf="selectedSession?.id === session.id" class="session-details">
-          <hr>
-          <h4>Session Details</h4>
-          <p><strong>Host:</strong> {{ session.host }}</p>
-          <p><strong>Description:</strong> {{ session.description || 'No description available' }}</p>
-          <p><strong>Start Time:</strong> {{ session.createdAt | date:'medium' }}</p>
-          <p *ngIf="session.endTime"><strong>End Time:</strong> {{ session.endTime | date:'medium' }}</p>
-        </div>
-  
-        <button class="join-btn" (click)="joinSession(session.id)">Join Session</button>
-      </div>
-  
-      <div *ngIf="sessions.length === 0" class="no-sessions">
-        <p>No active sessions found</p>
-      </div>
-    </div>
+<mat-toolbar color="primary" class="navbar">
+  <div class="left-section">
+    <span class="logo" routerLink="/home">VideoCall</span>
+    <button mat-button routerLink="/home" routerLinkActive="active">Home</button>
   </div>
+  <span class="spacer"></span>
+  <button mat-button routerLink="/profile" routerLinkActive="active">Profile</button>
+  <button mat-button (click)="logout()">Logout</button>
+</mat-toolbar>
+
+<div class="container">
+  <header>
+    <h1>Video Call Sessions</h1>
+    <button class="create-btn" (click)="createNewSession()">Create New Session</button>
+  </header>
+
+  <div class="sessions-list">
+    <app-session-card
+    *ngFor="let session of sessions; let i = index"
+    [session]="session"
+    [selectedSession]="selectedSession"
+    (edit)="openEditSessionModal(session, i)"
+    (delete)="deleteSession(i)"
+    (join)="joinSession(session.id)"
+    (toggleDetails)="showSessionDetails(session)">
+  </app-session-card>
+  </div>
+
+  <div *ngIf="sessions.length === 0" class="no-sessions">
+    <p>No active sessions found</p>
+  </div>
+</div>
