@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using VideoCall.Core.Dto;
 
 namespace VideoCall.Core.Entities;
 
@@ -18,4 +19,14 @@ public class Participant
 
     public string? User_Id { get; set; }
     public User? User { get; set; }
+
+    public ParticipantDto ToParticipantDto()
+    {
+        return new ParticipantDto
+        {
+            id = Id,
+            name = Name,
+            role = Role,
+        };
+    }
 }

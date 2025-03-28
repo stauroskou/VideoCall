@@ -19,7 +19,7 @@ public class Session
 
 
     public bool HasEnded => HasEndedByHost || EndTime < DateTime.Now;
-    public double Duration => (EndTime - StartTime).Hours;
+    public double Duration => (EndTime - StartTime).Minutes;
     public int TotalParticipant => Participants.Count;
 
     public List<Participant> Participants { get; set; } = new();
