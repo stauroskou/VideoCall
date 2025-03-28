@@ -1,5 +1,4 @@
 ﻿using VideoCall.Application.Abstractions.Messaging;
-using VideoCall.Core.Errors;
 using VideoCall.Core.Interfaces;
 using VideoCall.Core.Shared;
 
@@ -10,11 +9,7 @@ internal class DeleteSessionCommandHandler(ISessionService sessionService) : ICo
     public async Task<Result<bool>> Handle(DeleteSessionCommand request, CancellationToken cancellationToken)
     {
         var deleted = await sessionService.DeleteSessionAsync(request.sessionId);
-        if (!deleted)
-        {
-            return Result.Failure<bool>(DomainErrors.SessionErrors.SessionNotFound);
-        }
 
-        return Result.Success(deleted);
+        return deleted;
     }
 }

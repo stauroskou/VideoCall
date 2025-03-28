@@ -2,4 +2,4 @@
 
 namespace VideoCall.Application.Participant.Commands.RemoveParticipant;
 
-public record class RemoveParticipantCommand(string participantId, string sessionId) : ICommand;
+public record class RemoveParticipantCommand(string participantId, string sessionId) : ICommand<string>;

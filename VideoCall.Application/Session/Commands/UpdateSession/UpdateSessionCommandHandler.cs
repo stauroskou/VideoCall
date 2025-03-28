@@ -18,12 +18,8 @@ internal class UpdateSessionCommandHandler(ISessionService sessionService) : ICo
         };
 
         var session =  await sessionService.UpdateSessionAsync(request.id, req);
-        if (session == null)
-        {
-            return Result.Failure<Core.Entities.Session>(DomainErrors.SessionErrors.SessionNotFound);
-        }
 
-        return Result.Success(session);
+        return session;
 
     }
 }

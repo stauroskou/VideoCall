@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using VideoCall.Application.Abstractions.ApiResponse;
 using VideoCall.Application.Session.Commands.CreateSession;
 using VideoCall.Application.Session.Commands.DeleteSession;
@@ -9,20 +11,24 @@ using VideoCall.Application.Session.Queries.GetSessions;
 using VideoCall.Application.Session.Queries.GetSessionsById;
 using VideoCall.Core.Entities;
 using VideoCall.Core.Session.Requests;
-using VideoCall.Pesistance.Persistance;
 
 namespace VideoCall.Api.Controllers;
 
 [Authorize]
 [Route("api/[controller]")]
 [ApiController]
-public class SessionController(AppDbContext _appContext, ISender sender) : Controller
+public class SessionController(UserManager<User> userManager, ISender sender) : Controller
 {
     [HttpPost("create")]
     public async Task<IActionResult> CreateSession([FromBody]CreateSessionRequest request)
     {
-        var command = new CreateSessionCommand(request.name, request.startTime, request.endTime);
+        ClaimsPrincipal hostUser = this.User;
+        string hostUserId = userManager.GetUserId(hostUser)!;
+
+
+        var command = new CreateSessionCommand(request.name, hostUserId, request.startTime, request.endTime);
         var result = await sender.Send(command);
+
         if (result.IsFailure)
         {
             return BadRequest(new GenericResponse<Session>(result.Error));
@@ -35,6 +41,7 @@ public class SessionController(AppDbContext _appContext, ISender sender) : Contr
     {
         var query = new GetSessionsQuery();
         var sessions = await sender.Send(query);
+
         return Ok(new GenericResponse<List<Session>?>(sessions.Value));
     }
 

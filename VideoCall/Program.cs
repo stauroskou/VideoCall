@@ -1,7 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Text.Json.Serialization;
+using VideoCall.Api.Hubs;
+using VideoCall.Api.Notifications;
 using VideoCall.Core.Entities;
+using VideoCall.Core.Interfaces;
 using VideoCall.Infrastructure.Configuration;
 using VideoCall.Pesistance.Persistance;
 
@@ -19,8 +25,25 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDefaultConfiguration();
 builder.Services.AddMediatRConfiguration();
 
-builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
-    .AddIdentityCookies();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "http://localhost:44372/",
+            ValidAudience = "http://localhost:4200/",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+        };
+
+    });
+
+builder.Services.ConfigureApplicationCookie(options => {
+    options.Cookie.SameSite = SameSiteMode.None;
+});
 
 builder.Services.AddAuthorizationBuilder();
 
@@ -37,9 +60,24 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 
 
+builder.Services.AddScoped<ISessionNotifier, SessionNotifier>();
+
 builder.Services.AddIdentityCore<User>()
     .AddEntityFrameworkStores<AppDbIdentityContext>()
     .AddApiEndpoints();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials()
+              .SetIsOriginAllowed(_ => true);
+    });
+});
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -51,19 +89,22 @@ if (app.Environment.IsDevelopment())
 }
 
 
+
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCors();
 
 app.UseHttpsRedirection();
 
 app.MapControllers();
+app.MapHub<SessionHub>("/sessionHub");
+
+
 
 app.Run();
 
 
 /*TODO: 
-    Ftiakse to User
     Add a new DTO to handle the Session and Participant entities
     Add websockets support with SignalR
     Add a new service to handle the SignalR hub
