@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using VideoCall.Application.Abstractions.ApiResponse;
 using VideoCall.Core.Account.Requests;
+using VideoCall.Core.Account.Responses;
 using VideoCall.Core.Dto;
 using VideoCall.Core.Entities;
 using VideoCall.Core.Errors;
@@ -16,7 +17,7 @@ namespace VideoCall.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AccountController(SignInManager<User> _signInManager, UserManager<User> _userManager) : Controller
+public class AccountController(SignInManager<User> _signInManager, UserManager<User> _userManager, IConfiguration configuration) : Controller
 {
 
     [HttpPost("login")]
@@ -34,9 +35,13 @@ public class AccountController(SignInManager<User> _signInManager, UserManager<U
             return Unauthorized(new GenericResponse<User>(DomainErrors.UserErrors.UserWrongUserNameOrPassword));
         }
 
+
         var token = GenerateJwtToken(request.UserName);
 
-        return Ok(new GenericResponse<string>("Login successful"));
+        return Ok(new GenericResponse<LoginResponse>(new LoginResponse
+        {
+            Token = token
+        }));
     }  
 
     [HttpPost("register")]
@@ -91,14 +96,14 @@ public class AccountController(SignInManager<User> _signInManager, UserManager<U
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_super_secret_keysdfdsfdsfsdfsdfsfdsfdgfdfsgdgdsfgdsgdsgdvvsdsvdsgdgdgd"));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
             issuer: "http://localhost:44372/",
             audience: "http://localhost:4200/",
             claims: claims,
-            expires: DateTime.Now.AddMinutes(30),
+            expires: DateTime.Now.AddDays(1),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
